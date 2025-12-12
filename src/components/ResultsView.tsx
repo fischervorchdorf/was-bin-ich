@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArtifactAnalysis } from '../types';
 import { ArrowLeft, Calendar, Target, TrendingUp, Users, Mail, FileDown, Quote, Sparkles, Award, Clock } from 'lucide-react';
 import { generatePDF } from '../services/pdfService';
@@ -16,6 +16,7 @@ interface ResultsViewProps {
 
 export const ResultsView: React.FC<ResultsViewProps> = ({ analysis, images, onReset }) => {
     const imageUrls = images.map(img => URL.createObjectURL(img));
+    const [activeStory, setActiveStory] = useState<'short' | 'long'>('short');
 
     const handleEmailShare = () => {
         const subject = `Was bin ich? - ${analysis.identity.name}`;
@@ -187,10 +188,45 @@ export const ResultsView: React.FC<ResultsViewProps> = ({ analysis, images, onRe
                     </div>
                 </div>
                 <div className="p-8 md:p-12">
+                    {/* Story Toggle */}
+                    {analysis.story.longNarrative && (
+                        <div className="flex justify-center gap-3 mb-8">
+                            <button
+                                onClick={() => setActiveStory('short')}
+                                className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeStory === 'short'
+                                        ? 'bg-gradient-to-r from-purple-800 to-indigo-800 text-white shadow-lg transform scale-105'
+                                        : 'bg-white text-purple-900 border-2 border-purple-300 hover:border-purple-500'
+                                    }`}
+                            >
+                                📖 Meine Geschichte
+                            </button>
+                            <button
+                                onClick={() => setActiveStory('long')}
+                                className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeStory === 'long'
+                                        ? 'bg-gradient-to-r from-purple-800 to-indigo-800 text-white shadow-lg transform scale-105'
+                                        : 'bg-white text-purple-900 border-2 border-purple-300 hover:border-purple-500'
+                                    }`}
+                            >
+                                📚 Zeitgeschichte
+                            </button>
+                        </div>
+                    )}
+
                     <h3 className="text-2xl md:text-3xl font-serif font-bold text-museum-charcoal mb-6 text-center">"{analysis.story.title}"</h3>
-                    <div className="pl-6 border-l-4 border-museum-gold">
-                        <p className="text-museum-charcoal leading-relaxed text-lg whitespace-pre-line">{analysis.story.narrative}</p>
-                    </div>
+
+                    {/* Short Story */}
+                    {activeStory === 'short' && (
+                        <div className="pl-6 border-l-4 border-museum-gold">
+                            <p className="text-museum-charcoal leading-relaxed text-lg whitespace-pre-line">{analysis.story.narrative}</p>
+                        </div>
+                    )}
+
+                    {/* Long Story */}
+                    {activeStory === 'long' && analysis.story.longNarrative && (
+                        <div className="pl-6 border-l-4 border-purple-500">
+                            <p className="text-museum-charcoal leading-relaxed text-lg whitespace-pre-line">{analysis.story.longNarrative}</p>
+                        </div>
+                    )}
 
                     {/* keyMoments removed - was duplicate */}
 

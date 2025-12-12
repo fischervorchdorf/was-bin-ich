@@ -23,7 +23,8 @@ export interface ArtifactEvolution {
 
 export interface ArtifactStory {
     title: string;
-    narrative: string; // Sherlock Holmes ICH-Form
+    narrative: string; // Sherlock Holmes ICH-Form (kurze Geschichte)
+    longNarrative?: string; // NEU: Lange historische Erzählung (3rd Person)
     keyMoments: string[];
     deductions?: string[]; // Sherlock-style clues
     detailHighlights?: string[]; // Notable details
