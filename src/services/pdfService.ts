@@ -375,7 +375,7 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]): P
     pdf.setTextColor(255, 255, 255);
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Meine Geschichte', margin + 3, yPosition + 7);
+    pdf.text('Meine Geschichte (Ich-Perspektive)', margin + 3, yPosition + 7);
     yPosition += 15;
 
     pdf.setTextColor(0, 0, 0);
@@ -393,7 +393,30 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]): P
         pdf.text(line, margin, yPosition);
         yPosition += 4;
     });
-    yPosition += 5;
+    yPosition += 10;
+
+    // Long Story - if available
+    if (analysis.story.longNarrative) {
+        checkPageBreak(50);
+        pdf.setFillColor(80, 40, 100); // Darker purple
+        pdf.rect(margin, yPosition, contentWidth, 10, 'F');
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Zeitgeschichte (Historische Erzählung)', margin + 3, yPosition + 7);
+        yPosition += 15;
+
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(9);
+        const longNarrativeLines = pdf.splitTextToSize(analysis.story.longNarrative, contentWidth);
+        longNarrativeLines.forEach((line: string) => {
+            checkPageBreak(5);
+            pdf.text(line, margin, yPosition);
+            yPosition += 4;
+        });
+        yPosition += 10;
+    }
 
     // Summary
     if (analysis.story.summary) {

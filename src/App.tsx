@@ -78,6 +78,12 @@ function App() {
         setAnalysis(null);
         setError('');
         setAppState(AppState.IDLE);
+        // Reset all checkboxes and inputs
+        setFromAustria(false);
+        setIsPhotography(false);
+        setIsPainting(false);
+        setOriginLocation('');
+        setMakerOrUse('');
     };
 
     return (
@@ -233,6 +239,7 @@ function App() {
                     <p className="text-sm text-gray-700">
                         &copy; {new Date().getFullYear()} Was bin ich? • Powered by{' '}
                         <span className="font-semibold text-museum-charcoal">Heimatverein Vorchdorf</span>
+                        {' '}• Version 3.2
                     </p>
                     <p className="text-xs text-gray-600 mt-1">
                         KI-gestützte Artefakt-Analyse mit historischem Storytelling
