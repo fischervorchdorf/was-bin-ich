@@ -95,9 +95,9 @@ ${isImageContent ? `
    - WICHTIG: Das Objekt spricht selbst! ("Ich bin...", "Ich erinnere mich...")
 `}
    - Länge: 300-500 Wörter
-   - Sprache: Gehobenes Deutsch, bild haft
+   - Sprache: Gehobenes Deutsch, bildhaft
 
-2b. LANGE HISTORISCHE ERZÄHLUNG (longNarrative) - OPTIONAL:
+2b. LANGE HISTORISCHE ERZÄHLUNG (longNarrative) - PFLICHT, IMMER GENERIEREN:
 ${isImageContent ? `
    - Erzähle eine spannende Geschichte über die dargestellte Szene/Person/Zeit
    - Perspektive: Externe Erzählung (NICHT Ich-Form)
@@ -116,7 +116,12 @@ ${isImageContent ? `
      * Zeitkolorit einfangen (Wie lebten/arbeiteten Menschen damals?)
      * Konkrete Charaktere mit Schicksalen
    - Ton: Literarisch, emotional berührend, historisch präzise
-   - WICHTIG: Diese Geschichte ist OPTIONAL - nur generieren wenn du genug historischen Kontext hast!
+   - KRITISCH WICHTIG: 
+     * Diese Geschichte ist PFLICHT - IMMER generieren!
+     * Auch wenn wenig kontext vorhanden ist, denke dir eine passende Geschichte zur Zeitepoche aus
+     * Nutze dein historisches Wissen über die Zeit
+     * Erfinde plausible Charaktere und deren Schicksale
+     * Hauptsache die Geschichte passt zeitlich und thematisch zum Artefakt!
 
 3. SHERLOCK-STYLE DEDUKTIONEN (deductions):
    - 3-5 kurze Hinweise, wie du ${isImageContent ? 'das Bild und seinen Inhalt' : 'das Objekt'} identifiziert hast
@@ -212,7 +217,7 @@ Gib JSON zurück in diesem Format:
   "story": {
     "title": "Spannender Titel für die Geschichte",
     "narrative": "Die vollständige Geschichte in ICH-Form (300-500 Wörter)",
-    "longNarrative": "OPTIONAL: Lange historische Erzählung (1500-2000 Wörter, 3rd Person)",
+    "longNarrative": "PFLICHT: Lange historische Erzählung (1500-2000 Wörter, 3rd Person) - IMMER GENERIEREN!",
     "keyMoments": ["Wichtiger Moment 1", "Moment 2"],
     "deductions": ["Sherlock-Style Hinweis 1", "Hinweis 2"],
     "detailHighlights": ["Besonderes Detail 1", "Detail 2"],
