@@ -51,7 +51,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesSelected }) =>
                                 <img
                                     src={preview}
                                     alt={`Artefakt ${index + 1}`}
-                                    className="w-full h-40 object-cover rounded-lg border-2 border-museum-stone/30"
+                                    className="w-full h-40 object-contain rounded-lg border-2 border-museum-stone/30"
                                 />
                                 <button
                                     onClick={() => removeImage(index)}

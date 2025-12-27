@@ -1,0 +1,59 @@
+--- a/src/components/ImageUpload.tsx
++++ b/src/components/ImageUpload.tsx
+@@ -44,7 +44,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImagesSelected }) =
+                             <img
+                                 src={preview}
+                                 alt={`Artefakt ${index + 1}`}
+-                                className="w-full h-40 object-cover rounded-lg border-2 border-museum-stone/30"
++                                className="w-full h-40 object-contain rounded-lg border-2 border-museum-stone/30 bg-gray-50"
+                             />
+                             <button
+                                 onClick={() => removeImage(index)}
+--- a/src/services/pdfService.ts
++++ b/src/services/pdfService.ts
+@@ -48,7 +48,8 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]):
+     // Images with correct aspect ratio
+     const maxImageWidth = (contentWidth - 10) / 2;
+-    const maxImageHeight = 50;
++    const maxImageHeight = 40;  // Reduced to better handle portrait images
++    const maxPortraitWidth = 30; // Max width for portrait orientation images
+ 
+     for (let i = 0; i < Math.min(images.length, 4); i++) {
+         const img = images[i];
+@@ -60,17 +61,27 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]):
+                     const tempImg = new Image();
+                     tempImg.onload = () => {
+                         // Calculate aspect ratio
+                         const aspectRatio = tempImg.width / tempImg.height;
+-                        let imgWidth = maxImageWidth;
+-                        let imgHeight = imgWidth / aspectRatio;
++                        const isPortrait = aspectRatio < 1; // width < height
+ 
+-                        // If height exceeds max, scale down
+-                        if (imgHeight > maxImageHeight) {
+-                            imgHeight = maxImageHeight;
+-                            imgWidth = imgHeight * aspectRatio;
++                        let imgWidth: number;
++                        let imgHeight: number;
++
++                        if (isPortrait) {
++                            // For portrait images, limit width first
++                            imgWidth = maxPortraitWidth;
++                            imgHeight = imgWidth / aspectRatio;
++                            // Make sure height doesn't exceed max
++                            if (imgHeight > maxImageHeight) {
++                                imgHeight = maxImageHeight;
++                                imgWidth = imgHeight * aspectRatio;
++                            }
++                        } else {
++                            // For landscape images, use original logic
++                            imgWidth = maxImageWidth;
++                            imgHeight = imgWidth / aspectRatio;
++                            if (imgHeight > maxImageHeight) {
++                                imgHeight = maxImageHeight;
++                                imgWidth = imgHeight * aspectRatio;
++                            }
+                         }
+ 
+                         const x = margin + (i % 2) * (maxImageWidth + 10);
+                         const y = yPosition + Math.floor(i / 2) * (maxImageHeight + 5);

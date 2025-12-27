@@ -45,7 +45,8 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]): P
 
     // Images with correct aspect ratio
     const maxImageWidth = (contentWidth - 10) / 2;
-    const maxImageHeight = 50;
+    const maxImageHeight = 40;  // Reduced for better portrait handling
+    const maxPortraitWidth = 30; // Max width for portrait-oriented images
 
     for (let i = 0; i < Math.min(images.length, 4); i++) {
         const img = images[i];
@@ -58,13 +59,31 @@ export const generatePDF = async (analysis: ArtifactAnalysis, images: File[]): P
                     tempImg.onload = () => {
                         // Calculate aspect ratio
                         const aspectRatio = tempImg.width / tempImg.height;
-                        let imgWidth = maxImageWidth;
-                        let imgHeight = imgWidth / aspectRatio;
+                        const isPortrait = aspectRatio < 1; // width < height
 
-                        // If height exceeds max, scale down
-                        if (imgHeight > maxImageHeight) {
-                            imgHeight = maxImageHeight;
-                            imgWidth = imgHeight * aspectRatio;
+                        let imgWidth: number;
+                        let imgHeight: number;
+
+                        if (isPortrait) {
+                            // For portrait images, limit width first to prevent distortion
+                            imgWidth = maxPortraitWidth;
+                            imgHeight = imgWidth / aspectRatio;
+                            // Make sure height doesn't exceed max
+                            if (imgHeight > maxImageHeight) {
+                                imgHeight = maxImageHeight;
+                                imgWidth = imgHeight * aspectRatio;
+                            }
+                        } else {
+                            // For landscape images, use original logic
+                            imgWidth = maxImageWidth;
+                            imgHeight = imgWidth / aspectRatio;
+
+                            // If height exceeds max, scale down
+                            if (imgHeight > maxImageHeight) {
+                                imgHeight = maxImageHeight;
+                                imgWidth = imgHeight * aspectRatio;
+                            }
+                        }
                         }
 
                         const x = margin + (i % 2) * (maxImageWidth + 10);
